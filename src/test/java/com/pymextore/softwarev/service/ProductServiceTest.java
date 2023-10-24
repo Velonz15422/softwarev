@@ -1,11 +1,9 @@
 package com.pymextore.softwarev.service;
 
 import static org.junit.Assert.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 
-import java.util.List;
 import java.util.Optional;
 
 import org.junit.Before;

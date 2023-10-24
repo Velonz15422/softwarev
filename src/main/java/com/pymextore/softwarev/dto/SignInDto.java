@@ -8,6 +8,8 @@ public class SignInDto {
         this.email = email;
         this.password = password;
     }
+    public SignInDto() {
+    }
     public String getEmail() {
         return email;
     }
