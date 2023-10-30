@@ -1,54 +1,41 @@
 package com.pymextore.softwarev.controller;
 
-import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.pymextore.softwarev.dto.ResponseDto;
 import com.pymextore.softwarev.dto.SignInDto;
-import com.pymextore.softwarev.dto.SignInResponseDto;
+import com.pymextore.softwarev.dto.SignInReponseDto;
 import com.pymextore.softwarev.dto.SignupDto;
-import com.pymextore.softwarev.exceptions.CustomException;
-import com.pymextore.softwarev.repository.UserRepository;
-import com.pymextore.softwarev.service.AuthService;
 import com.pymextore.softwarev.service.UserService;
 
-@RequestMapping("/user")
+@RequestMapping("user")
 @RestController
 public class UserController {
 
     @Autowired
     UserService userService;
 
-    @Autowired
-    UserRepository userRepository;
+    // two apis
 
-    @Autowired
-    AuthService authService;
-
-    /*@GetMapping("/all")
-    public List<User> findAllUser(@RequestParam("token") String token) throws AuthenticationFailException {
-        authService.authenticate(token);
-        return userRepository.findAll();
-    }*/
+    // signup
 
     @PostMapping("/signup")
-    public ResponseDto Signup(@RequestBody SignupDto signupDto) throws CustomException {
+    public ResponseDto signup(@RequestBody SignupDto signupDto) {
         return userService.signUp(signupDto);
     }
 
-  @PostMapping("/signIn")
-    public SignInResponseDto Signup(@RequestBody SignInDto signInDto) throws CustomException {
+
+    // signin
+
+    @PostMapping("/signin")
+    public SignInReponseDto signIn(@RequestBody SignInDto signInDto) {
         return userService.signIn(signInDto);
     }
-
-    // Cierre sesion
 
 
 }

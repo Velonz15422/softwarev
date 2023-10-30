@@ -1,6 +1,6 @@
 package com.pymextore.softwarev.dto;
-
 public class SignupDto {
+
     private String firstName;
     private String lastName;
     private String email;

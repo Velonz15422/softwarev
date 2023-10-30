@@ -9,11 +9,11 @@ import org.springframework.stereotype.Service;
 
 import com.pymextore.softwarev.dto.ResponseDto;
 import com.pymextore.softwarev.dto.SignInDto;
-import com.pymextore.softwarev.dto.SignInResponseDto;
+import com.pymextore.softwarev.dto.SignInReponseDto;
 import com.pymextore.softwarev.dto.SignupDto;
-import com.pymextore.softwarev.exceptions.AuthFailException;
+import com.pymextore.softwarev.exceptions.AuthenticationFailException;
 import com.pymextore.softwarev.exceptions.CustomException;
-import com.pymextore.softwarev.model.AuthToken;
+import com.pymextore.softwarev.model.AuthenticationToken;
 import com.pymextore.softwarev.model.User;
 import com.pymextore.softwarev.repository.UserRepository;
 
@@ -27,64 +27,86 @@ public class UserService {
     UserRepository userRepository;
 
     @Autowired
-    AuthService authService;
+    AuthenticationService authenticationService;
 
     @Transactional
-    public ResponseDto signUp(SignupDto signUpDto){
-        
-        if (Objects.nonNull(userRepository.findByEmail(signUpDto.getEmail()))) {
-            throw new CustomException("User already logged");
+    public ResponseDto signUp(SignupDto signupDto) {
+        // check if user is already present
+        if (Objects.nonNull(userRepository.findByEmail(signupDto.getEmail()))) {
+            // we have an user
+            throw new CustomException("user already present");
         }
-        String encryptedPassword = signUpDto.getPassword();
+
+
+        // hash the password
+
+        String encryptedpassword = signupDto.getPassword();
+
         try {
-            encryptedPassword = hashPassword(signUpDto.getPassword());
+            encryptedpassword = hashPassword(signupDto.getPassword());
         } catch (NoSuchAlgorithmException e) {
             e.printStackTrace();
         }
- 
-        User user = new User(signUpDto.getFirstName(), signUpDto.getLastName(),
-         signUpDto.getEmail(), encryptedPassword);
 
-         userRepository.save(user);
+        User user = new User(signupDto.getFirstName(), signupDto.getLastName(),
+                signupDto.getEmail(), encryptedpassword);
 
-        final AuthToken authToken = new AuthToken(user);
+        userRepository.save(user);
 
-        authService.saveConfirmationToken(authToken);
+        // save the user
 
-        ResponseDto responseDto = new ResponseDto("Success", "response");
+        // create the token
+
+        final AuthenticationToken authenticationToken = new AuthenticationToken(user);
+
+        authenticationService.saveConfirmationToken(authenticationToken);
+
+        ResponseDto responseDto = new ResponseDto("success", "user created succesfully");
         return responseDto;
     }
 
-
-    String hashPassword(String password) throws NoSuchAlgorithmException {
+    private String hashPassword(String password) throws NoSuchAlgorithmException {
         MessageDigest md = MessageDigest.getInstance("MD5");
         md.update(password.getBytes());
         byte[] digest = md.digest();
-        String myHash = DatatypeConverter
+        String hash = DatatypeConverter
                 .printHexBinary(digest).toUpperCase();
-        return myHash;
+        return hash;
     }
 
+    public SignInReponseDto signIn(SignInDto signInDto) {
+        // find user by email
 
-    public SignInResponseDto signIn(SignInDto signInDto) {
         User user = userRepository.findByEmail(signInDto.getEmail());
 
         if (Objects.isNull(user)) {
-            throw new AuthFailException("User isnt valid");
+            throw new AuthenticationFailException("user is not valid");
         }
-            try {
-                if(user.getPasswoprd().equals(hashPassword(signInDto.getPassword()))){
-                                throw new AuthFailException("wrong password");
 
-                }
-            } catch (NoSuchAlgorithmException e) {
-                e.printStackTrace();
-            }
-            AuthToken token = authService.getToken(user);
+        // hash the password
 
-            if (Objects.isNull(token)) {
-                throw new CustomException("Token isnt present");
+        try {
+            if (!user.getPasswoprd().equals(hashPassword(signInDto.getPassword()))) {
+                throw new AuthenticationFailException("wrong password");
             }
-            return new SignInResponseDto("success", token.getToken());
+        } catch (NoSuchAlgorithmException e) {
+            e.printStackTrace();
+        }
+
+        // compare the password in DB
+
+        // if password match
+
+        AuthenticationToken token = authenticationService.getToken(user);
+
+        // retrive the token
+
+        if (Objects.isNull(token)) {
+            throw new CustomException("token is not present");
+        }
+
+        return new SignInReponseDto("sucess", token.getToken());
+
+        // return response
     }
 }

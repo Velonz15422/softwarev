@@ -15,13 +15,12 @@ import jakarta.persistence.Table;
 
 @Entity
 @Table(name = "tokens")
-public class AuthToken {
-    
+public class AuthenticationToken {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
     private Integer id;
-    
+
     private String token;
 
     @Column(name = "created_date")
@@ -30,13 +29,6 @@ public class AuthToken {
     @OneToOne(targetEntity = User.class, fetch = FetchType.EAGER)
     @JoinColumn(nullable = false, name = "user_id")
     private User user;
-
-    public AuthToken(User user) {
-        this.user = user;
-        this.createdDate = new Date();
-        this.token = UUID.randomUUID().toString();
-
-    }
 
     public String getToken() {
         return token;
@@ -70,16 +62,12 @@ public class AuthToken {
         this.id = id;
     }
 
-    public AuthToken(Integer id, String Token, Date createdDate, User user) {
-        this.id = id;
-        this.token = Token;
-        this.createdDate = createdDate;
+    public AuthenticationToken(User user) {
         this.user = user;
+        this.createdDate = new Date();
+        this.token = UUID.randomUUID().toString();
     }
 
-    public AuthToken() {
+    public AuthenticationToken() {
     }
-    
-    
-
 }

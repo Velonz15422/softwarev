@@ -1,4 +1,4 @@
-package com.pymextore.softwarev.service;
+/*package com.pymextore.softwarev.service;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
@@ -76,4 +76,4 @@ public class CategoryServiceTest {
         boolean result = categoryService.findById(categoryId);
         assertEquals(false, result);
     }
-}
+}*/

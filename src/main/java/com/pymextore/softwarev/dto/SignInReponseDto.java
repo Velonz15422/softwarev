@@ -1,8 +1,14 @@
 package com.pymextore.softwarev.dto;
 
-public class SignInResponseDto {
+public class SignInReponseDto {
+
     private String status;
     private String token;
+
+    public SignInReponseDto(String status, String token) {
+        this.status = status;
+        this.token = token;
+    }
 
     public String getStatus() {
         return status;
@@ -17,11 +23,6 @@ public class SignInResponseDto {
     }
 
     public void setToken(String token) {
-        this.token = token;
-    }
-
-    public SignInResponseDto(String status, String token) {
-        this.status = status;
         this.token = token;
     }
 }

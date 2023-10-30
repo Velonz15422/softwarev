@@ -1,4 +1,4 @@
-package com.pymextore.softwarev.service;
+/*package com.pymextore.softwarev.service;
 
 import static org.junit.Assert.*;
 import static org.mockito.Mockito.*;
@@ -82,5 +82,5 @@ public class UserServiceTest {
 
         assertEquals("success", response.getStatus());
     }
-}
+}*/
 

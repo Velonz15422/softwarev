@@ -6,15 +6,15 @@ import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 
 @ControllerAdvice
-public class ExceptionController {
-    
+public class ExceptionControllerAdvice {
+
     @ExceptionHandler(value = CustomException.class)
     public final ResponseEntity<String> handleCustomException(CustomException exception){
         return new ResponseEntity<>(exception.getMessage(), HttpStatus.BAD_REQUEST);
     }
-    
-    @ExceptionHandler(value = AuthFailException.class)
-    public final  ResponseEntity<String> handleAuthFailException(AuthFailException exception){
+
+    @ExceptionHandler(value = AuthenticationFailException.class)
+    public final ResponseEntity<String> handleAuthenticationFailException(AuthenticationFailException exception) {
         return new ResponseEntity<>(exception.getMessage(), HttpStatus.BAD_REQUEST);
     }
 }
