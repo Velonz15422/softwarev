@@ -40,11 +40,11 @@ public class WishListController {
         authenticationService.authenticate(token);
 
 
-        // find the user
+
 
         User user = authenticationService.getUser(token);
 
-        // save the item in wishlist
+
 
         WishList wishList = new WishList(user, product);
 
@@ -56,16 +56,15 @@ public class WishListController {
     }
 
 
-    // get all wishlist item for a user
+
 
     @GetMapping("/{token}")
     public ResponseEntity<List<ProductDto>> getWishList(@PathVariable("token") String token) {
 
-        // authenticate the token
+
         authenticationService.authenticate(token);
 
 
-        // find the user
 
         User user = authenticationService.getUser(token);
 
