@@ -25,15 +25,10 @@ public class CategoryController {
     CategoryService categoryService;
 
     @PostMapping
-public ResponseEntity<ApiResponse> createCategory(@RequestBody Category category) {
-    try {
+    public ResponseEntity<ApiResponse> createCategory(@RequestBody Category category) {
         categoryService.createCategory(category);
-        return new ResponseEntity<>(new ApiResponse(true, "Category created successfully"), HttpStatus.CREATED);
-    } catch (Exception e) {
-        return new ResponseEntity<>(new ApiResponse(false, "Failed to create category: " + e.getMessage()), HttpStatus.INTERNAL_SERVER_ERROR);
+        return new ResponseEntity<>(new ApiResponse(true, "Created"), HttpStatus.CREATED);
     }
-}
-
 
     @GetMapping("/list")
     public List<Category> listCategory() {
