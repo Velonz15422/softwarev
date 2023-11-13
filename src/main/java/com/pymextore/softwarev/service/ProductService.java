@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.pymextore.softwarev.dto.ProductDto;
+import com.pymextore.softwarev.exceptions.ProductNotExistsException;
 import com.pymextore.softwarev.model.Category;
 import com.pymextore.softwarev.model.Product;
 import com.pymextore.softwarev.repository.ProductRepository;
@@ -59,5 +60,13 @@ public class ProductService {
         product.setName(productDto.getName());
         product.setPrice(productDto.getPrice());
         productRepository.save(product);
+    }
+
+    public Product findById(Integer productId) throws ProductNotExistsException {
+        Optional<Product> optionalProduct = productRepository.findById(productId);
+        if (optionalProduct.isEmpty()) {
+            throw new ProductNotExistsException("product id is invalid: " + productId);
+        }
+        return optionalProduct.get();
     }
 }
