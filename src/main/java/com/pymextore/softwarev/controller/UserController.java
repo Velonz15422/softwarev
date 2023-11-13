@@ -2,6 +2,7 @@ package com.pymextore.softwarev.controller;
 
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -12,7 +13,7 @@ import com.pymextore.softwarev.dto.SignInDto;
 import com.pymextore.softwarev.dto.SignInReponseDto;
 import com.pymextore.softwarev.dto.SignupDto;
 import com.pymextore.softwarev.service.UserService;
-
+@CrossOrigin(origins = "*", allowedHeaders = "*")
 @RequestMapping("user")
 @RestController
 public class UserController {
