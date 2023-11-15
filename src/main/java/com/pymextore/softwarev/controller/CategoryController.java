@@ -18,7 +18,6 @@ import com.pymextore.softwarev.common.ApiResponse;
 import com.pymextore.softwarev.model.Category;
 import com.pymextore.softwarev.service.CategoryService;
 
-@CrossOrigin(origins = "*", allowedHeaders = "*")
 @RestController
 @RequestMapping("/category")
 public class CategoryController {
@@ -26,18 +25,21 @@ public class CategoryController {
     @Autowired
     CategoryService categoryService;
 
+    @CrossOrigin
     @PostMapping
     public ResponseEntity<ApiResponse> createCategory(@RequestBody Category category) {
         categoryService.createCategory(category);
         return new ResponseEntity<>(new ApiResponse(true, "Created"), HttpStatus.CREATED);
     }
 
+    @CrossOrigin
     @GetMapping("/list")
     public List<Category> listCategory() {
         return categoryService.listCategory();
 
     }
 
+    @CrossOrigin
     @PutMapping("/{categoryId}")
     public ResponseEntity<ApiResponse> updateCategory(@PathVariable("categoryId") int categoryId,
             @RequestBody Category category) {
