@@ -1,24 +1,23 @@
 package com.pymextore.softwarev.config;
 
-import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.web.cors.CorsConfiguration;
 
-import org.springframework.web.cors.CorsConfigurationSource;
-import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
-import java.util.Arrays;
+import org.springframework.web.servlet.config.annotation.CorsRegistry;
+import org.springframework.web.servlet.config.annotation.EnableWebMvc;
+import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
+
 
 @Configuration
-public class CorsConfig {
-@Bean
-CorsConfigurationSource corsConfigurationSource() {
-CorsConfiguration corsConfiguration = new CorsConfiguration();
-corsConfiguration.setAllowedOrigins (Arrays.asList("*"));
-corsConfiguration.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE"));
-corsConfiguration.setExposedHeaders(Arrays.asList("*"));
+@EnableWebMvc
+public class CorsConfig implements WebMvcConfigurer {
 
-UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
-source.registerCorsConfiguration("/**", corsConfiguration);
-return source;
-}
+    @Override
+    public void addCorsMappings(CorsRegistry registry) {
+        registry.addMapping("/**")
+                .allowedOrigins("*")
+                .allowedMethods("*")
+                .allowedHeaders("*")
+                .allowCredentials(false)
+                .maxAge(3600);
+    }
 }
