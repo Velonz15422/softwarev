@@ -7,13 +7,6 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 @SpringBootTest
 class SoftwarevApplicationTests {
 
-	public WebMvcConfigurer corsConfigurer() {
-		return new WebMvcConfigurer() {
-			@Override
-			public void addCorsMappings(CorsRegistry registry) {
-				registry.addMapping("/greeting-javaconfig").allowedOrigins("*");
-			}
-		};
-	}
+	
 
 }
