@@ -6,7 +6,6 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
-import jakarta.validation.constraints.Pattern;
 
 @Entity
 @Table(name = "user")
@@ -28,6 +27,9 @@ public class User {
     private String password;
     @Column(name = "role")
     private String role;
+
+    @Column(name = "address")
+    private String address;
 
     public Integer getId() {
         return id;
@@ -87,13 +89,25 @@ public class User {
         this.role = role;
     }
 
-    public User(String firstName, String lastName, String email, String password) {
+    public User(String firstName, String lastName, String email, String password, String address, String role) {
         this.firstName = firstName;
         this.lastName = lastName;
         this.email = email;
         this.password = password;
+        this.address = address;
+        this.role = role;
     }
 
+    
+
     public User() {
+    }
+
+    public String getAddress() {
+        return address;
+    }
+
+    public void setAddress(String address) {
+        this.address = address;
     }
 }

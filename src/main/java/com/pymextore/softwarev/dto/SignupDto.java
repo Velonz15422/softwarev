@@ -6,6 +6,7 @@ public class SignupDto {
     private String email;
     private String password;
     private String role;
+    private String address;
 
     public String getFirstName() {
         return firstName;
@@ -46,6 +47,16 @@ public class SignupDto {
     public void setRole(String role) {
         this.role = role;
     }
+
+    public String getAddress() {
+        return address;
+    }
+
+    public void setAddress(String address) {
+        this.address = address;
+    }
+
+    
 
     
 }

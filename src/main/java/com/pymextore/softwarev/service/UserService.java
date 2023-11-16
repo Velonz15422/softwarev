@@ -35,7 +35,7 @@ public class UserService {
             throw new CustomException("user already present");
         }
 
-        String role = signupDto.getRole().toLowerCase(); 
+        String role = signupDto.getRole().toLowerCase();
 
         if (!role.equals("admin") && !role.equals("user")) {
             throw new CustomException("Invalid role. Role must be either 'admin' or 'user'");
@@ -50,7 +50,7 @@ public class UserService {
         }
 
         User user = new User(signupDto.getFirstName(), signupDto.getLastName(),
-                signupDto.getEmail(), encryptedpassword);
+                signupDto.getEmail(), encryptedpassword, signupDto.getAddress(), signupDto.getRole());
 
         userRepository.save(user);
 
@@ -79,7 +79,6 @@ public class UserService {
             throw new AuthenticationFailException("user is not valid");
         }
 
-
         try {
             if (!user.getPasswoprd().equals(hashPassword(signInDto.getPassword()))) {
                 throw new AuthenticationFailException("wrong password");
@@ -88,10 +87,7 @@ public class UserService {
             e.printStackTrace();
         }
 
-      
-
         AuthenticationToken token = authenticationService.getToken(user);
-
 
         if (Objects.isNull(token)) {
             throw new CustomException("token is not present");
@@ -100,4 +96,21 @@ public class UserService {
         return new SignInReponseDto("sucess", token.getToken());
 
     }
+
+    @Transactional
+    public ResponseDto updateUser(Integer userId, SignupDto updatedUserData) {
+        User existingUser = userRepository.findById(userId)
+                .orElseThrow(() -> new CustomException("User not found"));
+
+        existingUser.setFirstName(updatedUserData.getFirstName());
+        existingUser.setLastName(updatedUserData.getLastName());
+        existingUser.setPasswoprd(updatedUserData.getPassword());
+        existingUser.setAddress(updatedUserData.getAddress());
+
+        userRepository.save(existingUser);
+
+        ResponseDto responseDto = new ResponseDto("success", "User updated successfully");
+        return responseDto;
+    }
+
 }
