@@ -20,6 +20,7 @@ public class Product {
     private @NotNull String imageURL;
     private @NotNull double price;
     private @NotNull String description;
+    private @NotNull Integer quantity;
 
 
     @ManyToOne
@@ -74,4 +75,14 @@ public class Product {
     public void setId(Integer id) {
         this.id = id;
     }
+
+    public Integer getQuantity() {
+        return quantity;
+    }
+
+    public void setQuantity(Integer quantity) {
+        this.quantity = quantity;
+    }
+
+    
 }

@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.pymextore.softwarev.dto.ProductDto;
+import com.pymextore.softwarev.exceptions.CustomException;
 import com.pymextore.softwarev.exceptions.ProductNotExistsException;
 import com.pymextore.softwarev.model.Category;
 import com.pymextore.softwarev.model.Product;
@@ -20,12 +21,24 @@ public class ProductService {
 
     public void createProduct(ProductDto productDto, Category category) {
         Product product = new Product();
+        validateProductDto(productDto);
         product.setDescription(productDto.getDescription());
         product.setImageURL(productDto.getImageURL());
         product.setName(productDto.getName());
         product.setCategory(category);
         product.setPrice(productDto.getPrice());
+        product.setQuantity(productDto.getQuantity());
         productRepository.save(product);
+    }
+
+    private void validateProductDto(ProductDto productDto) throws CustomException {
+        if (productDto.getPrice() <= 1000) {
+            throw new CustomException("Price must be greater than 1000");
+        }
+
+        if (productDto.getQuantity() <= 0) {
+            throw new CustomException("Quantity cannot be negative or zero");
+        }
     }
 
     public ProductDto getProductDto(Product product) {
@@ -36,6 +49,8 @@ public class ProductService {
         productDto.setCategoryId(product.getCategory().getId());
         productDto.setPrice(product.getPrice());
         productDto.setId(product.getId());
+        product.setQuantity(productDto.getQuantity());
+
         return productDto;
     }
 
@@ -54,6 +69,8 @@ public class ProductService {
         if (!optionalProduct.isPresent()) {
             throw new Exception("product not present");
         }
+        validateProductDto(productDto);
+
         Product product = optionalProduct.get();
         product.setDescription(productDto.getDescription());
         product.setImageURL(productDto.getImageURL());

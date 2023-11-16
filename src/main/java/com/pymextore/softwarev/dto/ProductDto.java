@@ -1,14 +1,21 @@
 package com.pymextore.softwarev.dto;
 
+import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Positive;
 
 public class ProductDto {
     private Integer id;
     private @NotNull String name;
     private @NotNull String imageURL;
+    
+    @Min(value = 1000, message = "Prices must be more than 1000")
     private @NotNull double price;
     private @NotNull String description;
     private @NotNull Integer categoryId;
+    
+    @Positive(message = "Quantity cannot be negative or zero")
+    private @NotNull Integer quantity;
 
 
     public ProductDto() {
@@ -61,4 +68,14 @@ public class ProductDto {
     public void setId(Integer id) {
         this.id = id;
     }
+
+    public Integer getQuantity() {
+        return quantity;
+    }
+
+    public void setQuantity(Integer quantity) {
+        this.quantity = quantity;
+    }
+
+    
 }
