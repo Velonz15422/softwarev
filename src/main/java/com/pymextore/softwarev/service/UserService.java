@@ -31,14 +31,15 @@ public class UserService {
 
     @Transactional
     public ResponseDto signUp(SignupDto signupDto) {
-        // check if user is already present
         if (Objects.nonNull(userRepository.findByEmail(signupDto.getEmail()))) {
-            // we have an user
             throw new CustomException("user already present");
         }
 
+        String role = signupDto.getRole().toLowerCase(); 
 
-        // hash the password
+        if (!role.equals("admin") && !role.equals("user")) {
+            throw new CustomException("Invalid role. Role must be either 'admin' or 'user'");
+        }
 
         String encryptedpassword = signupDto.getPassword();
 
@@ -52,10 +53,6 @@ public class UserService {
                 signupDto.getEmail(), encryptedpassword);
 
         userRepository.save(user);
-
-        // save the user
-
-        // create the token
 
         final AuthenticationToken authenticationToken = new AuthenticationToken(user);
 
@@ -75,7 +72,6 @@ public class UserService {
     }
 
     public SignInReponseDto signIn(SignInDto signInDto) {
-        // find user by email
 
         User user = userRepository.findByEmail(signInDto.getEmail());
 
@@ -83,7 +79,6 @@ public class UserService {
             throw new AuthenticationFailException("user is not valid");
         }
 
-        // hash the password
 
         try {
             if (!user.getPasswoprd().equals(hashPassword(signInDto.getPassword()))) {
@@ -93,13 +88,10 @@ public class UserService {
             e.printStackTrace();
         }
 
-        // compare the password in DB
-
-        // if password match
+      
 
         AuthenticationToken token = authenticationService.getToken(user);
 
-        // retrive the token
 
         if (Objects.isNull(token)) {
             throw new CustomException("token is not present");
@@ -107,6 +99,5 @@ public class UserService {
 
         return new SignInReponseDto("sucess", token.getToken());
 
-        // return response
     }
 }

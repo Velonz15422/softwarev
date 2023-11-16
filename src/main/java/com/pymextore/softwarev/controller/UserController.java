@@ -21,17 +21,11 @@ public class UserController {
     @Autowired
     UserService userService;
 
-    // two apis
-
-    // signup
-
     @PostMapping("/signup")
     public ResponseDto signup(@RequestBody SignupDto signupDto) {
         return userService.signUp(signupDto);
     }
 
-
-    // signin
 
     @PostMapping("/signin")
     public SignInReponseDto signIn(@RequestBody SignInDto signInDto) {

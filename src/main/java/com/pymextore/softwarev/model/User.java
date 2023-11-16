@@ -6,6 +6,7 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
+import jakarta.validation.constraints.Pattern;
 
 @Entity
 @Table(name = "user")
@@ -25,6 +26,8 @@ public class User {
 
     @Column(name = "password")
     private String password;
+    @Column(name = "role")
+    private String role;
 
     public Integer getId() {
         return id;
@@ -64,6 +67,24 @@ public class User {
 
     public void setPasswoprd(String passwoprd) {
         this.password = passwoprd;
+    }
+
+    
+
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
+
+    public String getRole() {
+        return role;
+    }
+
+    public void setRole(String role) {
+        this.role = role;
     }
 
     public User(String firstName, String lastName, String email, String password) {
