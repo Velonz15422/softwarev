@@ -28,8 +28,15 @@ public class CartService {
 
     public void addToCart(AddToCartDto addToCartDto, User user) {
 
-        // validate if the product id is valid
         Product product = productService.findById(addToCartDto.getProductId());
+
+        Integer productId = addToCartDto.getProductId();
+        Integer requestedQuantity = addToCartDto.getQuantity();
+        int availableQuantity = productService.getAvailableQuantity(productId);
+
+        if (requestedQuantity > availableQuantity) {
+            throw new CustomException("Not enough stock for your cart");
+        }
 
         Cart cart = new Cart();
         cart.setProduct(product);

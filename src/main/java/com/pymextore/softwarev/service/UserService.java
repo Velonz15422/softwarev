@@ -3,6 +3,7 @@ package com.pymextore.softwarev.service;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.Objects;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -15,6 +16,7 @@ import com.pymextore.softwarev.exceptions.AuthenticationFailException;
 import com.pymextore.softwarev.exceptions.CustomException;
 import com.pymextore.softwarev.model.AuthenticationToken;
 import com.pymextore.softwarev.model.User;
+import com.pymextore.softwarev.repository.TokenRepository;
 import com.pymextore.softwarev.repository.UserRepository;
 
 import jakarta.transaction.Transactional;
@@ -113,4 +115,14 @@ public class UserService {
         return responseDto;
     }
 
+    public User authenticate(String token) {
+        User user = userRepository.findByToken(token);
+
+        if (user == null) {
+            throw new CustomException("Authentication failed. Invalid token.");
+        }
+
+        return user;
+    }
+    
 }

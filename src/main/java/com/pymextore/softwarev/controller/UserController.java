@@ -2,7 +2,10 @@ package com.pymextore.softwarev.controller;
 
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -14,6 +17,7 @@ import com.pymextore.softwarev.dto.ResponseDto;
 import com.pymextore.softwarev.dto.SignInDto;
 import com.pymextore.softwarev.dto.SignInReponseDto;
 import com.pymextore.softwarev.dto.SignupDto;
+import com.pymextore.softwarev.exceptions.CustomException;
 import com.pymextore.softwarev.service.UserService;
 @CrossOrigin(origins = "*", allowedHeaders = "*")
 @RequestMapping("user")
@@ -38,6 +42,8 @@ public class UserController {
     public ResponseDto updateUser(@PathVariable Integer userId, @RequestBody SignupDto updatedUserData) {
         return userService.updateUser(userId, updatedUserData);
     }
+
+  
 
 
 }

@@ -31,10 +31,21 @@ public class User {
     @Column(name = "address")
     private String address;
 
+    @Column(name = "token")
+    private String token;
+
     public Integer getId() {
         return id;
     }
 
+    public String getToken() {
+        return token;
+    }
+
+    public void setToken(String token) {
+        this.token = token;
+    }
+    
     public void setId(Integer id) {
         this.id = id;
     }

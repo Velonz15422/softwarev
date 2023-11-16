@@ -86,4 +86,14 @@ public class ProductService {
         }
         return optionalProduct.get();
     }
+    public int getAvailableQuantity(Integer productId) {
+        Product product = productRepository.findById(productId)
+                .orElseThrow(() -> new CustomException("Product not found id: " + productId));
+
+        return product.getQuantity();
+    }
+
+    public Product getProductById(Long productId) {
+        return null;
+    }
 }

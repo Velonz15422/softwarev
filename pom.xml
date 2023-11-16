@@ -55,13 +55,13 @@
 	<dependency>
         <groupId>junit</groupId>
         <artifactId>junit</artifactId>
-        <version>4.12</version> <!-- Utiliza la versión correcta de JUnit -->
+        <version>4.12</version> 
         <scope>test</scope>
     </dependency>
 	<dependency>
         <groupId>org.junit.jupiter</groupId>
         <artifactId>junit-jupiter-engine</artifactId>
-        <version>5.8.1</version> <!-- Asegúrate de usar la versión más reciente -->
+        <version>5.8.1</version>
         <scope>test</scope>
     </dependency>
 		<dependency>
@@ -90,7 +90,7 @@
 		<dependency>
         <groupId>mysql</groupId>
         <artifactId>mysql-connector-java</artifactId>
-        <version>8.0.27</version> <!-- Asegúrate de usar la versión más reciente -->
+        <version>8.0.27</version> 
     </dependency>
 		<dependency>
     <groupId>org.springdoc</groupId>
