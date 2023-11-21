@@ -1,86 +1,97 @@
-/*package com.pymextore.softwarev.service;
+package com.pymextore.softwarev.service;
 
 import static org.junit.Assert.*;
 import static org.mockito.Mockito.*;
 
-import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
-
-
-
-
-
-import org.junit.Before;
-import org.junit.Test;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
-import org.mockito.MockitoAnnotations;
+import java.util.Optional;
 
 import com.pymextore.softwarev.dto.ResponseDto;
 import com.pymextore.softwarev.dto.SignInDto;
-import com.pymextore.softwarev.dto.SignInResponseDto;
+import com.pymextore.softwarev.dto.SignInReponseDto;
 import com.pymextore.softwarev.dto.SignupDto;
-import com.pymextore.softwarev.model.AuthToken;
+import com.pymextore.softwarev.exceptions.AuthenticationFailException;
+import com.pymextore.softwarev.exceptions.CustomException;
+import com.pymextore.softwarev.model.AuthenticationToken;
 import com.pymextore.softwarev.model.User;
+import com.pymextore.softwarev.repository.TokenRepository;
 import com.pymextore.softwarev.repository.UserRepository;
 
-import jakarta.xml.bind.DatatypeConverter;
+import org.junit.Before;
+import org.junit.Test;
 
 public class UserServiceTest {
 
-    @InjectMocks
     private UserService userService;
 
-    @Mock
-    private UserRepository userRepository;
-
-    @Mock
-    private AuthService authService;
+    private UserRepository userRepositoryMock;
+    private AuthenticationService authenticationServiceMock;
 
     @Before
-    public void init() {
-        MockitoAnnotations.initMocks(this);
+    public void setUp() {
+        userRepositoryMock = mock(UserRepository.class);
+        authenticationServiceMock = mock(AuthenticationService.class);
+        userService = new UserService();
+        userService.userRepository = userRepositoryMock;
+        userService.authenticationService = authenticationServiceMock;
     }
 
-    @Test
-    public void testSignUp() throws NoSuchAlgorithmException {
+    @Test(expected = CustomException.class)
+    public void testSignUpUserAlreadyPresent() {
         SignupDto signupDto = new SignupDto();
-        signupDto.setFirstName("John");
-        signupDto.setLastName("Doe");
-        signupDto.setEmail("johndoe@example.com");
-        signupDto.setPassword("password123");
+        signupDto.setEmail("existing.user@example.com");
 
-        User existingUser = new User();
-        when(userRepository.findByEmail(signupDto.getEmail())).thenReturn(existingUser);
+        when(userRepositoryMock.findByEmail("existing.user@example.com")).thenReturn(new User());
 
-        ResponseDto response = userService.signUp(signupDto);
+        userService.signUp(signupDto);
+    }
 
-        verify(userRepository, times(1)).findByEmail(signupDto.getEmail());
-        verify(userRepository, times(1)).save(any(User.class));
-        verify(authService, times(1)).saveConfirmationToken(any(AuthToken.class));
+    @Test(expected = CustomException.class)
+    public void testSignUpInvalidRole() {
+        SignupDto signupDto = new SignupDto();
+        signupDto.setRole("invalid_role");
 
-        assertEquals("Success", response.getStatus());
+        userService.signUp(signupDto);
+    }
+
+
+    @Test(expected = AuthenticationFailException.class)
+    public void testSignInInvalidUser() {
+        SignInDto signInDto = new SignInDto();
+        signInDto.setEmail("nonexistent.user@example.com");
+
+        when(userRepositoryMock.findByEmail("nonexistent.user@example.com")).thenReturn(null);
+
+        userService.signIn(signInDto);
+    }
+
+
+
+
+
+    @Test(expected = CustomException.class)
+    public void testUpdateUserNotFound() {
+        int userId = 1;
+
+        when(userRepositoryMock.findById(userId)).thenReturn(Optional.empty());
+
+        userService.updateUser(userId, new SignupDto());
     }
 
     @Test
-    public void testSignIn() throws NoSuchAlgorithmException {
-        SignInDto signInDto = new SignInDto();
-        signInDto.setEmail("johndoe@example.com");
-        signInDto.setPassword("password123");
-
+    public void testAuthenticate() {
+        String token = "validToken";
         User user = new User();
-        user.setEmail(signInDto.getEmail());
-        user.setPasswoprd(DatatypeConverter.printHexBinary(MessageDigest.getInstance("MD5").digest(signInDto.getPassword().getBytes())).toUpperCase());
+        when(userRepositoryMock.findByToken(token)).thenReturn(user);
 
-        when(userRepository.findByEmail(signInDto.getEmail())).thenReturn(user);
-        when(authService.getToken(user)).thenReturn(new AuthToken(user));
-
-        SignInResponseDto response = userService.signIn(signInDto);
-
-        verify(userRepository, times(1)).findByEmail(signInDto.getEmail());
-        verify(authService, times(1)).getToken(user);
-
-        assertEquals("success", response.getStatus());
+        assertEquals(user, userService.authenticate(token));
     }
-}*/
 
+    @Test(expected = CustomException.class)
+    public void testAuthenticateInvalidToken() {
+        String invalidToken = "invalidToken";
+        when(userRepositoryMock.findByToken(invalidToken)).thenReturn(null);
+
+        userService.authenticate(invalidToken);
+    }
+}
